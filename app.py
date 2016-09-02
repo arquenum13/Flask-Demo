@@ -20,9 +20,9 @@ from bokeh.resources import INLINE
 from bokeh.util.string import encode_utf8
 
 from flask import Flask,render_template,request
-day8_app = Flask(__name__)
+app = Flask(__name__)
 
-@day8_app.route('/index',methods=['GET','POST'])
+@app.route('/index',methods=['GET','POST'])
 def index():
   if request.method == 'GET':
     return render_template('userinfo_pg1.html')
@@ -38,15 +38,15 @@ def index():
     
     return render_template('userinfo_pg2.html', stock_symbol = stock.upper(), script=script, div=div, js_resources=js_resources, css_resources=css_resources)
 
-@day8_app.errorhandler(404)
+@app.errorhandler(404)
 def not_found(error):
   return render_template('userinfo_pg3.html'), 404
 
-@day8_app.errorhandler(500)
+@app.errorhandler(500)
 def internal_server_error(error):
   return render_template('userinfo_pg3.html'), 500    
 
-@day8_app.errorhandler(Exception)
+@app.errorhandler(Exception)
 def unhandled_exception(e):
     return render_template('userinfo_pg3.html'), 500 
 
@@ -54,8 +54,8 @@ def unhandled_exception(e):
 def plot(x, y):
   
   p = figure(title = 'Data From Quandle WIKI Set', x_axis_label='Date', x_axis_type='datetime')
-  p.y_range.start = 0
-  p.y_range.end = max(y)*1.1
+  #p.y_range.start = 0
+  #p.y_range.end = max(y)*1.1
   #p.x_range.start = x[-1]
   p.line(x, y)
   
@@ -84,4 +84,4 @@ def get_stock_data(stock, days_back):
   return stock_dates, stock_close  
   
 if __name__ == '__main__':
-    day8_app.run(port=33507)
+    app.run(port=33507)
